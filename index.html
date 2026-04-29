@@ -220,6 +220,19 @@ body{font-family:'Jost',sans-serif;background:#fff;color:#0a0a0a;overflow-x:hidd
 .footer-brand{font-family:'Cinzel',serif;font-size:16px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;}
 .footer-note{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#b8a898;}
 
+/* REFERENCES */
+.refs-bar{background:var(--blue);padding:0 3rem;cursor:pointer;user-select:none;display:flex;align-items:center;justify-content:space-between;}
+.refs-bar-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(255,255,255,0.7);padding:14px 0;}
+.refs-arrow{color:rgba(255,255,255,0.5);font-size:12px;transition:transform .3s;}
+.refs-arrow.open{transform:rotate(180deg);}
+.refs-body{background:var(--blue);max-height:0;overflow:hidden;transition:max-height .35s ease;}
+.refs-body.open{max-height:300px;}
+.refs-list{padding:0 3rem 2rem;list-style:none;display:flex;flex-direction:column;gap:10px;}
+.refs-list li{font-family:'Jost',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);letter-spacing:0.05em;}
+.refs-list li span{color:rgba(255,255,255,0.6);font-weight:500;margin-right:8px;}
+.refs-list a{color:rgba(255,255,255,0.55);text-decoration:none;word-break:break-all;}
+.refs-list a:hover{color:#fff;text-decoration:underline;}
+
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .hero-kicker{animation:fadeUp .6s ease .1s both;}
 .hero-headline{animation:fadeUp .8s ease .2s both;}
@@ -358,6 +371,19 @@ body{font-family:'Jost',sans-serif;background:#fff;color:#0a0a0a;overflow-x:hidd
   <div class="footer-brand">Denim Through the Decades</div>
   <div class="footer-note">Sources: PBS &nbsp;·&nbsp; Byrdie &nbsp;·&nbsp; Hawthorn &nbsp;&nbsp;&copy; 2025</div>
 </footer>
+
+<div class="refs-bar" onclick="toggleRefs()">
+  <span class="refs-bar-label">References</span>
+  <span class="refs-arrow" id="refsArrow">&#9650;</span>
+</div>
+<div class="refs-body" id="refsBody">
+  <ul class="refs-list">
+    <li><span>1.</span><a href="https://www.pbs.org/wgbh/americanexperience/features/riveted-history-of-jeans-fifty-years-jeans-fashion/" target="_blank">https://www.pbs.org/wgbh/americanexperience/features/riveted-history-of-jeans-fifty-years-jeans-fashion/</a></li>
+    <li><span>2.</span><a href="https://www.byrdie.com/the-history-of-jeans-2040397" target="_blank">https://www.byrdie.com/the-history-of-jeans-2040397</a></li>
+    <li><span>3.</span><a href="https://www.hawthornintl.com/history-of-denim" target="_blank">https://www.hawthornintl.com/history-of-denim</a></li>
+    <li><span>4.</span><a href="https://www.hawthornintl.com/history-of-denim#:~:text=The%20term%20%E2%80%9Cjeans%E2%80%9D%20gained%20popularity,referred%20to%20as%20waist%20overalls." target="_blank">https://www.hawthornintl.com/history-of-denim#:~:text=The%20term%20%E2%80%9Cjeans%E2%80%9D%20gained%20popularity,referred%20to%20as%20waist%20overalls.</a></li>
+  </ul>
+</div>
 
 <script>
 // ── DECADE DATA ──────────────────────────────────────────────────────────────
@@ -714,6 +740,11 @@ function updateLook() {
 
 function doClear() {
   ['top','bottom','full','shoes','acc','bag'].forEach(removeSlot);
+}
+
+function toggleRefs() {
+  document.getElementById('refsBody').classList.toggle('open');
+  document.getElementById('refsArrow').classList.toggle('open');
 }
 
 function doRandom() {
