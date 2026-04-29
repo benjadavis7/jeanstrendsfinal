@@ -12,7 +12,8 @@
       "Bash(python3 reprocess_mens.py)",
       "Bash(tmutil listlocalsnapshots *)",
       "Bash(pip install *)",
-      "Bash(python3 -c \"import scipy; print\\('scipy ok'\\)\")"
+      "Bash(python3 -c \"import scipy; print\\('scipy ok'\\)\")",
+      "WebFetch(domain:benjadavis7.github.io)"
     ]
   }
 }
