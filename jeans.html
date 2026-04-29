@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>100 Years of Denim</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Jost',sans-serif;background:#fff;color:#0a0a0a;overflow-x:hidden;}
+:root{--blue:#0d2a4a;--blue-mid:#1a4070;--blue-lt:#e8eef5;--gold:#b8921a;--gold-lt:#faf4e4;--rule:rgba(13,42,74,0.18);}
+
+/* MASTHEAD */
+.masthead{border-bottom:3px solid var(--blue);padding:0 3rem;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:72px;}
+.mast-meta{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#999;font-weight:300;}
+.mast-logo{font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:0.3em;text-transform:uppercase;text-align:center;}
+.mast-nav{display:flex;gap:2rem;justify-content:flex-end;}
+.mast-nav a{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#999;text-decoration:none;transition:color .2s;}
+.mast-nav a:hover{color:#0a0a0a;}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 72px);border-bottom:3px solid var(--blue);}
+.hero-left{padding:5rem 4rem;display:flex;flex-direction:column;justify-content:space-between;border-right:3px solid var(--blue);}
+.hero-kicker{font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#b8a898;font-weight:300;display:flex;align-items:center;gap:12px;}
+.hero-kicker::after{content:'';flex:1;height:1px;background:#e0d8cc;}
+.hero-headline{font-family:'Cinzel',serif;font-size:clamp(72px,10vw,136px);font-weight:900;line-height:0.88;color:#0a0a0a;flex:1;display:flex;flex-direction:column;justify-content:center;padding:2rem 0;}
+.hero-headline .blue{color:var(--blue);}
+.hero-subline{font-size:18px;font-weight:300;color:#999;margin-top:1rem;letter-spacing:0.05em;}
+.hero-bottom{display:flex;justify-content:space-between;align-items:flex-end;}
+.hero-desc{font-size:13px;font-weight:300;color:#666;line-height:1.9;max-width:300px;border-left:3px solid var(--blue);padding-left:1.25rem;}
+.scroll-cue{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:#ccc;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.scroll-line{width:1px;height:52px;background:linear-gradient(to bottom,transparent,#aaa);}
+.hero-right{background:var(--blue);position:relative;overflow:hidden;cursor:pointer;}
+.hero-right-num{position:absolute;font-family:'Cinzel',serif;font-size:380px;font-weight:900;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,0.06);bottom:-60px;right:-20px;line-height:1;pointer-events:none;z-index:1;}
+.hero-cover-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;z-index:2;}
+.hero-cover-img.visible{display:block;}
+.hero-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:3;transition:opacity .3s;}
+.hero-placeholder.hidden{opacity:0;pointer-events:none;}
+.hero-img-plus{width:44px;height:44px;border:1.5px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:22px;color:rgba(255,255,255,0.25);}
+.hero-img-txt{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.25);text-align:center;}
+.hero-file-input{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:4;}
+.hero-caption{position:absolute;bottom:1.5rem;left:0;right:0;text-align:center;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);z-index:5;pointer-events:none;}
+
+/* CHAPTER NAV */
+.chap-nav{display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--blue);background:#fff;position:sticky;top:0;z-index:100;}
+.chap-nav::-webkit-scrollbar{display:none;}
+.chap{flex-shrink:0;padding:0 1.75rem;height:52px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;font-weight:400;color:#bbb;background:none;border:none;cursor:pointer;border-bottom:2.5px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap;}
+.chap:hover{color:#0a0a0a;}
+.chap.active{color:var(--blue);border-bottom-color:var(--blue);}
+
+/* DECADE SECTIONS */
+.decade{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--rule);min-height:90vh;opacity:0;transform:translateY(20px);transition:opacity .7s,transform .7s;}
+.decade.visible{opacity:1;transform:translateY(0);}
+.decade:nth-child(even){direction:rtl;}
+.decade:nth-child(even)>*{direction:ltr;}
+@media(max-width:768px){.decade,.decade:nth-child(even){grid-template-columns:1fr;direction:ltr;min-height:auto;}}
+
+.e0{--ea:var(--blue);--eb:#f0f3f8;}
+.e1{--ea:#0d3060;--eb:#edf2f8;}
+.e2{--ea:#0a2a50;--eb:#e8f0f8;}
+.e3{--ea:#1a3d6a;--eb:#edf2f8;}
+.e4{--ea:#0d2a4a;--eb:#e8eef8;}
+.e5{--ea:#112240;--eb:#eaeef8;}
+.e6{--ea:#1a3a60;--eb:#e8f0f8;}
+.e7{--ea:#0f2d52;--eb:#e8eef8;}
+
+.decade-visual{background:var(--eb);display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;padding:3rem 2rem;position:relative;overflow:hidden;border-right:1px solid var(--rule);}
+.decade:nth-child(even) .decade-visual{border-right:none;border-left:1px solid var(--rule);}
+.d-bg-yr{position:absolute;font-family:'Cinzel',serif;font-size:200px;font-weight:900;color:transparent;-webkit-text-stroke:2px rgba(13,42,74,0.18);bottom:-10px;right:-5px;line-height:1;pointer-events:none;letter-spacing:-0.03em;}
+
+.archive-label{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ea);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(13,42,74,0.12);position:relative;z-index:2;font-weight:900;}
+.archive-grid{display:grid;gap:8px;position:relative;z-index:2;margin-bottom:16px;}
+.archive-grid-4{grid-template-columns:1fr 1fr 1fr 1fr;}
+.archive-grid-3{grid-template-columns:1fr 1fr 1fr;}
+.archive-grid-2{grid-template-columns:1fr 1fr;}
+.women-section{border-top:1px dashed rgba(13,42,74,0.15);padding-top:12px;position:relative;z-index:2;}
+.women-label{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ea);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(13,42,74,0.12);font-weight:900;}
+
+.arch-card{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.arch-card-img{background:#fff;border:1px solid rgba(13,42,74,0.1);padding:6px;aspect-ratio:3/4;width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.arch-card-img img{width:100%;height:100%;object-fit:contain;}
+.arch-card-lbl{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(13,42,74,0.55);text-align:center;font-weight:500;}
+
+.decade-text{padding:4rem 3.5rem;display:flex;flex-direction:column;justify-content:center;background:#fff;}
+
+.d-year{font-family:'Cinzel',serif;font-size:clamp(48px,7vw,82px);font-weight:900;line-height:0.88;color:#0a0a0a;margin-bottom:.4rem;}
+.d-name{font-family:'Cinzel',serif;font-size:clamp(14px,1.8vw,18px);font-weight:400;letter-spacing:0.08em;color:var(--gold);margin-bottom:2.5rem;text-transform:uppercase;}
+.facts{list-style:none;border-top:1px solid var(--rule);margin-bottom:2.5rem;}
+.facts li{font-size:14px;font-weight:300;line-height:1.85;padding:.85rem 0;border-bottom:1px solid var(--rule);color:#555;display:grid;grid-template-columns:30px 1fr;transition:color .2s;}
+.facts li:hover{color:#0a0a0a;}
+.fn{font-family:'Cinzel',serif;font-size:11px;font-weight:600;color:var(--gold);padding-top:2px;}
+.tags{display:flex;flex-wrap:wrap;gap:6px;}
+.tag{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 13px;border:1px solid rgba(184,146,26,0.35);color:var(--gold);}
+
+/* PULL QUOTE */
+.pquote{padding:6rem 4rem;text-align:center;border-bottom:1px solid var(--rule);background:var(--blue);position:relative;overflow:hidden;}
+.pquote-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0.3;pointer-events:none;z-index:0;}
+.pquote q,.pquote cite{position:relative;z-index:1;}
+.pquote q{font-family:'Cinzel',serif;font-size:clamp(20px,3vw,34px);font-weight:400;color:#fff;line-height:1.5;letter-spacing:0.03em;display:block;max-width:780px;margin:0 auto 1rem;}
+.pquote cite{font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.35);font-style:normal;font-family:'Cinzel',serif;}
+.hrule{height:3px;background:var(--blue);}
+
+/* STYLE STUDIO */
+.studio{background:#fff;padding:5rem 3rem;}
+.studio-inner{max-width:1200px;margin:0 auto;}
+.studio-header{display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-bottom:3rem;padding-bottom:3rem;border-bottom:1px solid var(--rule);align-items:end;position:relative;overflow:hidden;}
+.studio-ghost{position:absolute;font-family:'Cinzel',serif;font-size:clamp(120px,18vw,220px);font-weight:900;color:transparent;-webkit-text-stroke:1px rgba(184,146,26,0.08);right:-1rem;bottom:-2rem;line-height:1;pointer-events:none;letter-spacing:-0.04em;user-select:none;}
+.studio-kicker{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem;display:flex;align-items:center;gap:12px;}
+.studio-kicker::before{content:'';width:28px;height:1px;background:var(--gold);}
+.studio-title{font-family:'Cinzel',serif;line-height:0.88;letter-spacing:-0.01em;}
+.studio-title .st-build{font-size:clamp(40px,5.5vw,72px);font-weight:400;letter-spacing:0.1em;color:#999;display:block;}
+.studio-title .st-your{font-size:clamp(40px,5.5vw,72px);font-weight:400;letter-spacing:0.1em;color:#999;display:block;margin-top:0.15em;}
+.studio-title .st-look{font-size:clamp(64px,10vw,128px);font-weight:900;color:var(--blue);display:block;}
+.studio-sub{font-size:13px;font-weight:300;color:#777;line-height:2;margin-bottom:1.75rem;border-left:2px solid var(--gold-lt);padding-left:1rem;}
+
+/* ERA FILTERS */
+.era-filters{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:0;}
+.ef{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;padding:6px 14px;border:1px solid rgba(13,42,74,0.18);background:transparent;color:var(--blue);cursor:pointer;transition:all .15s;}
+.ef:hover{background:var(--blue);color:#fff;}
+.ef.on{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.15);}
+
+/* STUDIO LAYOUT */
+.studio-layout{display:grid;grid-template-columns:240px 1fr 220px;gap:2.5rem;align-items:start;}
+@media(max-width:960px){.studio-layout{grid-template-columns:1fr;}}
+
+/* WARDROBE PANEL */
+.ward-col{display:flex;flex-direction:column;gap:8px;}
+.ward-toggle{width:100%;justify-content:center;}
+.ward-panel{position:sticky;top:max(20px,calc(50vh - 310px));max-height:calc(100vh - 130px);display:flex;flex-direction:column;}
+#wardItems{overflow-y:auto;flex:1;padding-right:2px;scrollbar-width:thin;scrollbar-color:rgba(13,42,74,0.25) transparent;}
+#wardItems::-webkit-scrollbar{width:2px;}
+#wardItems::-webkit-scrollbar-track{background:transparent;}
+#wardItems::-webkit-scrollbar-thumb{background:rgba(13,42,74,0.2);border-radius:2px;}
+.ward-tabs{display:flex;border-bottom:1px solid rgba(13,42,74,0.15);margin-bottom:16px;}
+.ward-tab{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;padding:8px 20px;background:transparent;border:none;color:#aaa;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;}
+.ward-tab.active{color:var(--blue);border-bottom-color:var(--gold);}
+.ward-section-hdr{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.25em;text-transform:uppercase;color:var(--blue);margin:14px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:8px;}
+.ward-section-hdr::before{content:'';display:inline-block;width:4px;height:4px;background:var(--gold);flex-shrink:0;}
+.clothes-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
+.cloth-card{background:#fff;border:1px solid var(--rule);padding:8px;cursor:grab;transition:all .12s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.cloth-card:hover{border-color:var(--blue);box-shadow:0 2px 10px rgba(13,42,74,0.1);}
+.cloth-card:active{cursor:grabbing;opacity:.7;}
+.cloth-card.dragging{opacity:.25;}
+.cloth-card img{width:100%;aspect-ratio:3/4;object-fit:contain;}
+.cloth-card .cl{font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(13,42,74,0.4);text-align:center;}
+.cloth-card .ce{font-size:9px;color:#b8a898;font-family:'Jost',sans-serif;font-weight:300;}
+
+/* MANNEQUIN STAGE */
+.mani-col{display:flex;flex-direction:column;align-items:center;gap:14px;position:sticky;top:max(20px,calc(50vh - 310px));}
+.mani-frame{position:relative;padding:8px;}
+.mani-frame::before{content:'';position:absolute;inset:0;border:1px solid rgba(184,146,26,0.35);pointer-events:none;}
+.mani-frame::after{content:'STYLE STUDIO';position:absolute;top:-1px;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);background:#fff;padding:0 10px;white-space:nowrap;}
+.mani-stage{width:300px;height:520px;border:1.5px solid #1a1a1a;background:#fafafa;position:relative;overflow:hidden;}
+.mani-stage.drag-over{border-color:var(--blue);background:var(--blue-lt);}
+.mani-base{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;z-index:1;}
+.mani-base img{height:97%;width:auto;object-fit:contain;}
+.mani-head{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;z-index:5;pointer-events:none;}
+.mani-head img{height:97%;width:auto;object-fit:contain;clip-path:inset(0 0 86% 0);}
+.slot{position:absolute;z-index:2;pointer-events:none;display:flex;align-items:flex-start;justify-content:center;overflow:hidden;}
+#slotTop,#slotFull{z-index:3;}
+#slotAcc,#slotBag{z-index:4;}
+.slot img{object-fit:contain;display:none;}
+
+/* Top slot: covers torso area ~18%-52% of 480px = about 163px tall */
+/* Clothing slots — figure occupies ~31-69% of stage width, body center at 50% */
+#slotTop{position:absolute;top:13%;left:50%;transform:translateX(-50%);width:76%;height:30%;display:flex;align-items:flex-start;justify-content:center;overflow:hidden;}
+#slotTop img{width:100%;height:100%;object-fit:contain;object-position:center top;}
+#slotBottom{position:absolute;top:39%;left:50%;transform:translateX(-50%);width:68%;height:52%;display:flex;align-items:flex-start;justify-content:center;overflow:hidden;}
+#slotBottom img{width:100%;height:100%;object-fit:contain;object-position:center top;}
+#slotFull{position:absolute;top:8%;left:50%;transform:translateX(-50%);width:76%;height:85%;display:flex;align-items:flex-start;justify-content:center;overflow:hidden;}
+#slotFull img{width:100%;height:100%;object-fit:contain;object-position:center top;}
+#slotShoes{position:absolute;bottom:3%;left:50%;transform:translateX(-50%);width:68%;height:13%;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;}
+#slotShoes img{width:100%;height:100%;object-fit:contain;object-position:center bottom;}
+#slotAcc{position:absolute;top:0%;left:50%;transform:translateX(-50%);width:35%;height:9%;display:flex;align-items:flex-start;justify-content:center;overflow:hidden;}
+#slotAcc img{width:100%;height:100%;object-fit:contain;object-position:center top;}
+#slotBag{position:absolute;top:22%;left:57%;width:30%;height:36%;overflow:hidden;}
+#slotBag img{width:100%;height:100%;object-fit:contain;object-position:center top;}
+.mani-hint{position:absolute;bottom:18px;left:0;right:0;text-align:center;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:#ccc;z-index:3;pointer-events:none;transition:opacity .3s;}
+
+.studio-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.btn-prim{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;padding:12px 28px;background:var(--blue);color:#fff;border:none;cursor:pointer;transition:opacity .15s;}
+.btn-prim:hover{opacity:.85;}
+.btn-sec{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;padding:12px 20px;background:transparent;color:#0a0a0a;border:1px solid var(--rule);cursor:pointer;transition:all .15s;}
+.btn-sec:hover{border-color:#0a0a0a;}
+
+/* CURRENT LOOK PANEL — sits below mannequin */
+.look-panel{width:100%;max-width:320px;max-height:220px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(184,146,26,0.3) transparent;}
+.look-panel::-webkit-scrollbar{width:2px;}
+.look-panel::-webkit-scrollbar-thumb{background:rgba(184,146,26,0.3);}
+.look-panel h4{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--gold);display:flex;align-items:center;gap:8px;}
+.look-panel h4::before{content:'';display:inline-block;width:18px;height:1px;background:var(--gold);}
+
+/* BOTTOMS & SHOES PANEL — right column, click-to-toggle */
+.bots-panel{position:sticky;top:max(20px,calc(50vh - 310px));max-height:calc(100vh - 130px);display:flex;flex-direction:column;}
+.bots-hdr{flex-shrink:0;display:flex;border-bottom:1px solid rgba(13,42,74,0.15);margin-bottom:16px;}
+.bots-tab{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;padding:8px 20px;color:var(--blue);border-bottom:2px solid var(--gold);margin-bottom:-1px;}
+#botsItems{overflow-y:auto;flex:1;padding-right:2px;scrollbar-width:thin;scrollbar-color:rgba(13,42,74,0.25) transparent;}
+#botsItems::-webkit-scrollbar{width:2px;}
+#botsItems::-webkit-scrollbar-thumb{background:rgba(13,42,74,0.2);}
+.bots-card{background:#fff;border:1px solid var(--rule);padding:8px;cursor:pointer;transition:all .12s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.bots-card:hover{border-color:var(--blue);box-shadow:0 2px 10px rgba(13,42,74,0.1);}
+.bots-card.selected{border-color:var(--gold);background:rgba(184,146,26,0.07);box-shadow:inset 0 0 0 1px var(--gold);}
+.bots-card img{width:100%;aspect-ratio:3/4;object-fit:contain;}
+.bots-card .cl{font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(13,42,74,0.4);text-align:center;}
+.bots-card .ce{font-size:9px;color:#b8a898;font-family:'Jost',sans-serif;font-weight:300;}
+.look-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--rule);}
+.look-item img{width:38px;height:38px;object-fit:contain;border:0.5px solid var(--rule);flex-shrink:0;}
+.look-item .li-name{font-size:12px;color:#444;flex:1;line-height:1.3;}
+.look-item .li-era{font-size:10px;color:#b8a898;}
+.look-item button{font-size:13px;color:#ccc;background:none;border:none;cursor:pointer;padding:0 3px;line-height:1;}
+.look-item button:hover{color:#e24b4a;}
+.era-blend-hdr{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin:1rem 0 6px;opacity:0.8;}
+.era-blend-val{font-size:13px;color:#888;font-weight:300;font-family:'Jost',sans-serif;line-height:1.7;}
+.readout{border:1px solid var(--rule);padding:1rem;text-align:center;font-size:13px;font-weight:300;color:#888;line-height:1.85;min-height:70px;margin-top:1rem;font-family:'Jost',sans-serif;}
+.readout strong{color:#0a0a0a;font-weight:500;}
+
+/* FOOTER */
+.footer{border-top:3px solid var(--blue);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:#fff;}
+.footer-brand{font-family:'Cinzel',serif;font-size:16px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;}
+.footer-note{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#b8a898;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.hero-kicker{animation:fadeUp .6s ease .1s both;}
+.hero-headline{animation:fadeUp .8s ease .2s both;}
+.hero-desc{animation:fadeUp .7s ease .4s both;}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="mast-meta">A Fashion Archive &nbsp;·&nbsp; Est. 2025</div>
+  <div class="mast-logo">Denim Through the Decades</div>
+  <nav class="mast-nav">
+    <a href="#ds-0">History</a>
+    <a href="#studio">Style Studio</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-kicker">One Hundred Years &nbsp;·&nbsp; 1900 — 2020</div>
+    <div class="hero-headline">
+      <span>100</span>
+      <span style="font-size:clamp(32px,4vw,56px);font-weight:400;letter-spacing:0.12em;color:#999;">Years</span>
+      <span style="font-size:clamp(24px,3vw,44px);font-weight:400;letter-spacing:0.15em;color:#999;">of</span>
+      <span class="blue">Jeans</span>
+    </div>
+    <div class="hero-bottom">
+      <p class="hero-desc">Denim began as a fabric built to outlast hard labor. Over a century it absorbed every cultural shift and emerged as fashion's most enduring garment.</p>
+      <div class="scroll-cue"><div class="scroll-line"></div><span>Scroll</span></div>
+    </div>
+  </div>
+  <div class="hero-right" id="heroRight">
+    <div class="hero-right-num">100</div>
+    <img class="hero-cover-img" id="heroCoverImg" src="" alt="Cover"/>
+    <div class="hero-placeholder" id="heroPlaceholder">
+      <div class="hero-img-plus">+</div>
+      <div class="hero-img-txt">Add Cover Image</div>
+    </div>
+    <input type="file" class="hero-file-input" accept="image/*" onchange="loadHeroImg(event)">
+    <div class="hero-caption">Cover &nbsp;·&nbsp; Denim Archive 2025</div>
+  </div>
+</section>
+
+<nav class="chap-nav" id="chapNav"></nav>
+<main id="decRoot"></main>
+
+<div class="pquote">
+  <div class="pquote-bg" id="pquoteBg"></div>
+  <q>Jeans are the most beautiful things since the gondola.</q>
+  <cite>Diana Vreeland &nbsp;&mdash;&nbsp; Editor-in-Chief, Vogue</cite>
+</div>
+<div class="hrule"></div>
+
+<section class="studio" id="studio">
+  <div class="studio-inner">
+    <div class="studio-header">
+      <div class="studio-ghost">SS</div>
+      <div>
+        <div class="studio-kicker">Style Studio &nbsp;·&nbsp; No Rules</div>
+        <div class="studio-title">
+          <span class="st-build">Build</span>
+          <span class="st-your">your</span>
+          <span class="st-look">Look</span>
+        </div>
+      </div>
+      <div>
+        <p class="studio-sub">Drag any piece onto the mannequin. Switch between Men and Women, filter by decade, or randomize.</p>
+        <div class="era-filters">
+          <button class="ef on" onclick="setFilter('all',this)">All Eras</button>
+          <button class="ef" onclick="setFilter('1900s',this)">1900s–40s</button>
+          <button class="ef" onclick="setFilter('1950s',this)">1950s</button>
+          <button class="ef" onclick="setFilter('1960s',this)">1960s</button>
+          <button class="ef" onclick="setFilter('1970s',this)">1970s</button>
+          <button class="ef" onclick="setFilter('1980s',this)">1980s</button>
+          <button class="ef" onclick="setFilter('1990s',this)">1990s</button>
+          <button class="ef" onclick="setFilter('2000s',this)">2000s</button>
+          <button class="ef" onclick="setFilter('2010s',this)">2010s</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="studio-layout">
+
+      <!-- WARDROBE -->
+      <div class="ward-col">
+        <div class="ward-panel">
+          <div class="bots-hdr"><span class="bots-tab">Tops &amp; Accessories</span></div>
+          <div id="wardItems"></div>
+        </div>
+        <button class="btn-sec ward-toggle" id="genderToggle" onclick="toggleGender()">Switch to Men</button>
+      </div>
+
+      <!-- MANNEQUIN -->
+      <div class="mani-col">
+        <div class="mani-frame">
+        <div class="mani-stage" id="maniStage"
+          ondragover="event.preventDefault();this.classList.add('drag-over')"
+          ondragleave="this.classList.remove('drag-over')"
+          ondrop="onDrop(event)">
+          <div class="mani-base"><img id="maniImg" src="" alt="mannequin"/></div>
+          <div class="mani-head"><img id="maniHead" src="" alt=""/></div>
+          <div class="slot" id="slotTop"><img id="imgTop" src="" alt=""/></div>
+          <div class="slot" id="slotBottom"><img id="imgBottom" src="" alt=""/></div>
+          <div class="slot" id="slotFull"><img id="imgFull" src="" alt=""/></div>
+          <div class="slot" id="slotShoes"><img id="imgShoes" src="" alt=""/></div>
+          <div class="slot" id="slotAcc"><img id="imgAcc" src="" alt=""/></div>
+          <div class="slot" id="slotBag"><img id="imgBag" src="" alt=""/></div>
+          <div class="mani-hint" id="maniHint">Drag pieces here</div>
+        </div>
+        </div><!-- /mani-frame -->
+        <div class="studio-btns">
+          <button class="btn-prim" onclick="doRandom()">Randomize</button>
+          <button class="btn-sec" onclick="doClear()">Clear</button>
+          <button class="btn-sec" onclick="toggleGender()" id="genderToggle2">Switch to Men</button>
+        </div>
+        <div class="readout" id="readout">Your look will appear here.</div>
+        <div class="look-panel">
+          <h4>Current Look</h4>
+          <div id="lookList"></div>
+          <div class="era-blend-hdr">Era Blend</div>
+          <div class="era-blend-val" id="eraBlend">&mdash;</div>
+        </div>
+      </div>
+
+      <!-- BOTTOMS & SHOES — click to toggle -->
+      <div class="bots-panel" id="botsPanel">
+        <div class="bots-hdr"><span class="bots-tab">Jeans &amp; Shoes</span></div>
+        <div id="botsItems"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-brand">Denim Through the Decades</div>
+  <div class="footer-note">Sources: PBS &nbsp;·&nbsp; Byrdie &nbsp;·&nbsp; Hawthorn &nbsp;&nbsp;&copy; 2025</div>
+</footer>
+
+<script>
+// ── DECADE DATA ──────────────────────────────────────────────────────────────
+const DS = [
+  {id:'ds-0',yr:'1900s–40s',name:'Workwear Roots',ch:'Chapter I',cls:'e0',
+   facts:['Heavy straight-leg denim built for miners, cowboys, and railroad workers','Dark indigo — chosen for durability, never for style','Suspenders, flannel shirts, and heavy boots completed the daily uniform','Beauty was irrelevant; the only job was to not tear'],
+   tags:['Straight-Leg','Dark Indigo','High Waist','Suspenders','Work Boots'],
+   mens:[ ['mens_shirt','Shirt'],['mens_vest','Vest'],['mens_jeans','Jeans'],['mens_boots','Boots'] ],
+   womens:[ ['wom_jeans40','Jeans'],['wom_jacket40','Jacket'],['wom_coverall','Coverall'],['wom_shoes40','Shoes'] ]},
+  {id:'ds-1',yr:'1950s',name:'Rebellion & Youth',ch:'Chapter II',cls:'e1',
+   facts:['Slim cuts worn by James Dean transformed denim overnight','Cuffed hems — a quiet act of defiance that defined a generation','White tee, leather jacket, loafers: a new uniform for the restless','Jeans crossed from workwear into a symbol of youth rebellion'],
+   tags:['Slim Straight','Cuffed Hem','White Tee','Leather Jacket'],
+   mens:[ ['m50_tee','White Tee'],['m50_jacket','Jacket'],['m50_jeans','Jeans'],['m50_shoes','Shoes'] ],
+   womens:[ ['w50_blouse','Blouse'],['w50_jeans','Jeans'],['w50_headband','Headband'],['w50_heels','Heels'] ]},
+  {id:'ds-2',yr:'1960s',name:'Counterculture',ch:'Chapter III',cls:'e2',
+   facts:['Slim silhouettes began their slow bloom toward the flare','Patches, embroidery, and paint turned every pair into a manifesto','Tie-dye, peasant blouses, sandals — an anti-uniform held together by denim','For the first time, jeans carried genuine political weight'],
+   tags:['Slim to Flare','Patched','Tie-Dye','Round Shades','Canvas Sneakers'],
+   mens:[ ['m60_shirt','Floral Shirt'],['m60_jeans','Patched Jeans'],['m60_shades','Shades'],['m60_shoes','Sneakers'] ],
+   womens:[ ['w60s_blouse','Boho Blouse'],['w60s_jeans','Bell-Bottoms'],['w60s_headband','Headband'],['w60s_shoes','Platform Heels'] ]},
+  {id:'ds-3',yr:'1970s',name:'The Flare Era',ch:'Chapter IV',cls:'e3',
+   facts:['Bell-bottoms swept across a generation with the force of a movement','High waists, bold washes, structured denim — volume became virtue','Platform shoes and fringe jackets elevated workwear into spectacle','Denim-on-denim: the most 70s look imaginable'],
+   tags:['Bell-Bottom','High Rise','Fringe Jacket','Platforms'],
+   mens:[ ['m70_jacket','Denim Jacket'],['m70_shirt','Stripe Shirt'],['m70_jeans','Flare Jeans'],['m70_shoes','Platforms'] ],womens:[ ['w70_shirt','Op-Art Shirt'],['w70_jeans','Patchwork Flares'],['w70_earrings','Mod Earrings'],['w70_shoes','Silver Platforms'] ]},
+  {id:'ds-4',yr:'1980s',name:'Designer Denim',ch:'Chapter V',cls:'e4',
+   facts:['Acid wash arrived and suddenly denim could be glamorous','Calvin Klein stitched their name where miners once wore nothing','Tapered legs and mom jeans battled across a maximalist decade','Oversized blazers and graphic tees completed the equation'],
+   tags:['Tapered','Acid Wash','Mom Jean','Power Blazer'],
+   mens:[ ['m1980_blazer','Tweed Blazer'],['m1980_shirt','Striped Dress Shirt'],['m1980_jeans','Faded Straight Jeans'],['m1980_shoes','Black Derby Oxfords'] ],womens:[ ['w1980_jacket','Cropped Denim Jacket'],['w1980_blouse','Bow-Tie Blouse'],['w1980_jeans','High-Waist Mom Jeans'],['w1980_heels','T-Bar Block Heels'] ]},
+  {id:'ds-5',yr:'1990s',name:'Grunge & Ease',ch:'Chapter VI',cls:'e5',
+   facts:['Baggy and boyfriend cuts dismantled everything the 80s built','Medium wash and relaxed proportion became the new standard of cool','Flannel over crop tops, combat boots with everything','Grunge and minimalism pulled fashion in opposite directions simultaneously'],
+   tags:['Baggy','Medium Wash','Flannel','Combat Boots'],
+   mens:[ ['m80_tee','Grunge Tee'],['m80_flannel','Plaid Flannel'],['m80_jeans','Ripped Jeans'],['m80_shoes','Hi-Top Converse'] ],womens:[ ['w80_tee','Skull Tee'],['w80_jacket','Moto Jacket'],['w80_jeans','Acid Wash Jeans'],['w80_shoes','Teal Vans'] ]},
+  {id:'ds-6',yr:'2000s',name:'Low Rise & Skinny',ch:'Chapter VII',cls:'e6',
+   facts:['Ultra low-rise waistbands sank below the hip bone and stayed','Skinny jeans arrived mid-decade and dominated the rest of it','Rhinestones, embroidery, embellishment — excess was the aesthetic','Heeled boots and cropped jackets defined the Y2K silhouette'],
+   tags:['Skinny','Dark Rinse','Ultra Low','Rhinestones','Heeled Boots'],
+   mens:[ ['m2000_tee','Psycho Bunny Tee'],['m2000_shirt','Striped SS Shirt'],['m2000_jeans','Rock Revival Slim Jeans'],['m2000_shoes','DC Skate Shoes'] ],womens:[ ['w2000_tee','Army Angel Tee'],['w2000_bag','Pink Snakeskin Bag'],['w2000_jeans','Rhinestone Bootcut Jeans'],['w2000_heels','Hot Pink Platform Heels'] ]},
+  {id:'ds-7',yr:'2010s',name:'Streetwear & High Rise',ch:'Chapter VIII',cls:'e7',
+   facts:['High rise made its full comeback — low rise became nearly unwearable','Skinny held on while raw-hem and straight-leg cuts steadily grew','Oversized hoodies and clean sneakers redefined casual','Streetwear dissolved the boundary between comfort and high fashion'],
+   tags:['High Rise','Skinny / Straight','Raw Hem','Oversized Hoodie'],
+   mens:[ ['m2010_tee','OIOI Oversized Tee'],['m2010_rugby','Striped Rugby Shirt'],['m2010_jeans','Barrel Leg Dark Jeans'],['m2010_shoes','New Balance 990s'] ],womens:[ ['w2010_tank','Striped Crop Tank'],['w2010_sweat','Oversized Crewneck'],['w2010_jeans','Wide-Leg Barrel Jeans'],['w2010_shoes','White Nike Runners'] ]},
+];
+
+// ── BUILD DECADES ─────────────────────────────────────────────────────────────
+function buildDec() {
+  const root = document.getElementById('decRoot');
+  const nav  = document.getElementById('chapNav');
+  DS.forEach((d,i) => {
+    const nb = document.createElement('button');
+    nb.className='chap'; nb.textContent=d.yr;
+    nb.onclick=()=>document.getElementById(d.id).scrollIntoView({behavior:'smooth',block:'start'});
+    nav.appendChild(nb);
+    const sec = document.createElement('div');
+    sec.className=`decade ${d.cls}`; sec.id=d.id;
+    sec.innerHTML = decHTML(d,i);
+    root.appendChild(sec);
+  });
+  const sb = document.createElement('button');
+  sb.className='chap'; sb.textContent='Style Studio';
+  sb.onclick=()=>document.getElementById('studio').scrollIntoView({behavior:'smooth'});
+  nav.appendChild(sb);
+}
+
+function decHTML(d,i) {
+  const menCards  = d.mens.map(([k,l])=>archCard(k,l)).join('');
+  const womCards  = d.womens.map(([k,l])=>archCard(k,l)).join('');
+  const cols = n => n===4?'archive-grid-4':n===3?'archive-grid-3':'archive-grid-2';
+  const menSection = menCards ? `
+    <div class="archive-label">Men's Archive</div>
+    <div class="archive-grid ${cols(d.mens.length)}">${menCards}</div>` : `
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;position:relative;z-index:2;">
+      <div style="text-align:center;"><div class="archive-label" style="border:none;">${d.ch}</div>
+      <div style="font-family:'Cinzel',serif;font-size:clamp(26px,4vw,48px);font-weight:700;color:rgba(13,42,74,0.1);letter-spacing:0.05em;">${d.yr}</div>
+      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(13,42,74,0.18);margin-top:.5rem;">Archive</div></div></div>`;
+  const womSection = womCards ? `
+    <div class="women-section">
+      <div class="women-label">Women's Archive</div>
+      <div class="archive-grid ${cols(d.womens.length)}">${womCards}</div>
+    </div>` : '';
+  return `
+    <div class="decade-visual">
+      <div class="d-bg-yr">${d.yr.replace(/[^0-9]/g,'').slice(0,4)||'00'}</div>
+      ${menSection}${womSection}
+    </div>
+    <div class="decade-text">
+      
+      <div class="d-year">${d.yr}</div>
+      <div class="d-name">${d.name}</div>
+      <ul class="facts">${d.facts.map((f,fi)=>`<li><span class="fn">0${fi+1}</span><span>${f}</span></li>`).join('')}</ul>
+      <div class="tags">${d.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    </div>`;
+}
+
+function archCard(key,label) {
+  const src = IMGS[key] || '';
+  if(!src) return '';
+  return `<div class="arch-card"><div class="arch-card-img"><img src="${src}" alt="${label}" loading="lazy"/></div><div class="arch-card-lbl">${label}</div></div>`;
+}
+
+// ── SCROLL OBSERVER ───────────────────────────────────────────────────────────
+function initObs() {
+  const secs = document.querySelectorAll('.decade');
+  const btns = document.querySelectorAll('.chap');
+  const ro = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.07});
+  const ao = new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){
+      btns.forEach(b=>b.classList.remove('active'));
+      const idx=[...secs].indexOf(e.target);
+      if(idx>=0&&btns[idx])btns[idx].classList.add('active');
+    }
+  }),{rootMargin:'-40% 0px -40% 0px'});
+  secs.forEach(s=>{ro.observe(s);ao.observe(s);});
+}
+
+// ── HERO IMAGE ────────────────────────────────────────────────────────────────
+function setHeroCover(src){
+  document.getElementById('heroCoverImg').src=src;
+  document.getElementById('heroCoverImg').classList.add('visible');
+  document.getElementById('heroPlaceholder').classList.add('hidden');
+  document.getElementById('pquoteBg').style.backgroundImage=`url(${src})`;
+}
+function loadHeroImg(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>setHeroCover(ev.target.result);
+  r.readAsDataURL(f);
+}
+
+// ── WARDROBE DATA ─────────────────────────────────────────────────────────────
+const WARD = {
+  female: {
+    tops:[
+      {key:'wom_jacket40', label:'Tartan Jacket',   era:'1900s–40s', slot:'top'},
+      {key:'wom_coverall', label:'Button-Up Blouse', era:'1900s–40s', slot:'top'},
+      {key:'w50_blouse',   label:'Gingham Blouse',  era:'1950s',     slot:'top'},
+      {key:'w50_headband', label:'Polka Headband',  era:'1950s',     slot:'acc'},
+      {key:'w60s_blouse',   label:'Boho Blouse',     era:'1960s',     slot:'top'},
+      {key:'w60s_headband', label:'Floral Headband', era:'1960s',     slot:'acc'},
+      {key:'w70_shirt',     label:'Op-Art Shirt',    era:'1970s',     slot:'top'},
+      {key:'w70_tee',       label:'Striped Ribbed Tee', era:'1970s',  slot:'top'},
+      {key:'w1980_jacket',  label:'Cropped Denim Jacket', era:'1980s', slot:'top'},
+      {key:'w1980_blouse',  label:'Bow-Tie Blouse',      era:'1980s', slot:'top'},
+      {key:'w80_tee',       label:'Skull Graphic Tee',   era:'1990s', slot:'top'},
+      {key:'w80_jacket',    label:'Moto Jacket',         era:'1990s', slot:'top'},
+      {key:'w2000_tee',     label:'Army Angel Tee',       era:'2000s', slot:'top'},
+      {key:'w2000_bag',     label:'Pink Snakeskin Bag',   era:'2000s', slot:'bag'},
+      {key:'w2010_tank',    label:'Striped Crop Tank',    era:'2010s', slot:'top'},
+      {key:'w2010_sweat',   label:'Oversized Crewneck',   era:'2010s', slot:'top'},
+    ],
+    bottoms:[
+      {key:'wom_jeans40',  label:'Sailor Jeans',    era:'1900s–40s', slot:'bottom'},
+      {key:'wom_shoes40',  label:'Oxford Heels',    era:'1900s–40s', slot:'shoes'},
+      {key:'w50_jeans',    label:'High-Waist Jeans',era:'1950s',     slot:'bottom'},
+      {key:'w50_heels',    label:'T-Bar Heels',     era:'1950s',     slot:'shoes'},
+      {key:'w60s_jeans',    label:'Bell-Bottoms',    era:'1960s',     slot:'bottom'},
+      {key:'w60s_shoes',    label:'Platform Heels',  era:'1960s',     slot:'shoes'},
+      {key:'w70_jeans',     label:'Patchwork Flares',era:'1970s',     slot:'bottom'},
+      {key:'w70_shoes',     label:'Silver Platforms', era:'1970s',    slot:'shoes'},
+      {key:'w1980_jeans',   label:'High-Waist Mom Jeans',  era:'1980s', slot:'bottom'},
+      {key:'w1980_heels',   label:'T-Bar Block Heels',     era:'1980s', slot:'shoes'},
+      {key:'w2000_jeans',   label:'Rhinestone Bootcut Jeans',  era:'2000s', slot:'bottom'},
+      {key:'w2000_heels',   label:'Hot Pink Platform Heels',   era:'2000s', slot:'shoes'},
+      {key:'w2010_jeans',   label:'Wide-Leg Barrel Jeans',     era:'2010s', slot:'bottom'},
+      {key:'w2010_shoes',   label:'White Nike Runners',        era:'2010s', slot:'shoes'},
+      {key:'w80_jeans',     label:'Acid Wash Jeans',      era:'1990s', slot:'bottom'},
+      {key:'w80_shoes',     label:'Teal Hi-Top Vans',     era:'1990s', slot:'shoes'},
+    ],
+  },
+  male: {
+    tops:[
+      {key:'mens_shirt',   label:'Flannel Shirt',   era:'1900s–40s', slot:'top'},
+      {key:'mens_vest',    label:'Denim Vest',      era:'1900s–40s', slot:'top'},
+      {key:'m50_tee',      label:'White Tee',       era:'1950s',     slot:'top'},
+      {key:'m50_jacket',   label:'Leather Jacket',  era:'1950s',     slot:'top'},
+      {key:'m60_shirt',    label:'Floral Shirt',    era:'1960s',     slot:'top'},
+      {key:'m60_polo',     label:'Mod Polo Shirt',  era:'1960s',     slot:'top'},
+      {key:'m70_jacket',   label:'Denim Jacket',    era:'1970s',     slot:'top'},
+      {key:'m70_shirt',    label:'Stripe Shirt',    era:'1970s',     slot:'top'},
+      {key:'m1980_blazer', label:'Tweed Blazer',           era:'1980s', slot:'top'},
+      {key:'m1980_shirt',  label:'Striped Dress Shirt',   era:'1980s', slot:'top'},
+      {key:'m2000_tee',    label:'Psycho Bunny Tee',      era:'2000s', slot:'top'},
+      {key:'m2000_shirt',  label:'Striped SS Shirt',      era:'2000s', slot:'top'},
+      {key:'m2010_tee',    label:'OIOI Oversized Tee',    era:'2010s', slot:'top'},
+      {key:'m2010_rugby',  label:'Striped Rugby Shirt',   era:'2010s', slot:'top'},
+      {key:'m80_tee',      label:'Grunge Tee',          era:'1990s', slot:'top'},
+      {key:'m80_flannel',  label:'Plaid Flannel',       era:'1990s', slot:'top'},
+    ],
+    bottoms:[
+      {key:'mens_jeans',   label:'Dark Jeans',      era:'1900s–40s', slot:'bottom'},
+      {key:'mens_boots',   label:'Work Boots',      era:'1900s–40s', slot:'shoes'},
+      {key:'m50_jeans',    label:'Cuffed Jeans',    era:'1950s',     slot:'bottom'},
+      {key:'m50_shoes',    label:'Saddle Shoes',    era:'1950s',     slot:'shoes'},
+      {key:'m60_jeans',    label:'Patched Jeans',   era:'1960s',     slot:'bottom'},
+      {key:'m60_shoes',    label:'Canvas Sneakers', era:'1960s',     slot:'shoes'},
+      {key:'m70_jeans',    label:'Flare Jeans',     era:'1970s',     slot:'bottom'},
+      {key:'m70_shoes',    label:'Platform Oxfords', era:'1970s',    slot:'shoes'},
+      {key:'m1980_jeans',  label:'Faded Straight Jeans',   era:'1980s', slot:'bottom'},
+      {key:'m1980_shoes',  label:'Black Derby Oxfords',    era:'1980s', slot:'shoes'},
+      {key:'m2000_jeans',  label:'Rock Revival Slim Jeans', era:'2000s', slot:'bottom'},
+      {key:'m2000_shoes',  label:'DC Skate Shoes',          era:'2000s', slot:'shoes'},
+      {key:'m2010_jeans',  label:'Barrel Leg Dark Jeans',   era:'2010s', slot:'bottom'},
+      {key:'m2010_shoes',  label:'New Balance 990s',         era:'2010s', slot:'shoes'},
+      {key:'m80_jeans',    label:'Ripped Jeans',          era:'1990s', slot:'bottom'},
+      {key:'m80_shoes',    label:'Hi-Top Converse',       era:'1990s', slot:'shoes'},
+    ],
+  },
+};
+
+let curGender = 'female';
+let curFilter = 'all';
+let worn = {top:null,bottom:null,full:null,shoes:null,acc:null,bag:null};
+let dragItem = null;
+
+function setFilter(f, btn) {
+  curFilter = f;
+  document.querySelectorAll('.ef').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderWard();
+  renderBotsPanel();
+}
+
+function setGender(g) {
+  curGender = g;
+  const src = g==='female' ? MANI_F : MANI_M;
+  document.getElementById('maniImg').src = src;
+  document.getElementById('maniHead').src = src;
+  document.getElementById('genderToggle').textContent = g==='female' ? 'Switch to Men' : 'Switch to Women';
+  const t2 = document.getElementById('genderToggle2'); if(t2) t2.textContent = g==='female' ? 'Switch to Men' : 'Switch to Women';
+  renderWard();
+  renderBotsPanel();
+}
+
+function toggleGender() {
+  setGender(curGender==='female' ? 'male' : 'female');
+}
+
+function renderWard() {
+  const c = document.getElementById('wardItems');
+  c.innerHTML = '';
+  const data = WARD[curGender];
+
+  function makeSection(title, items) {
+    const list = curFilter==='all' ? items : items.filter(i=>i.era.includes(curFilter.replace('s','')));
+    if(!list.length) return;
+    const hdr = document.createElement('div'); hdr.className='ward-section-hdr'; hdr.textContent=title; c.appendChild(hdr);
+    const grid = document.createElement('div'); grid.className='clothes-grid';
+    list.forEach(item => {
+      if(!IMGS[item.key]) return;
+      const isOn = worn[item.slot]?.key === item.key;
+      const card = document.createElement('div');
+      card.className = 'bots-card' + (isOn ? ' selected' : '');
+      card.innerHTML=`<img src="${IMGS[item.key]}" alt="${item.label}" loading="lazy"/>
+        <div class="cl">${item.label}</div><div class="ce">${item.era}</div>`;
+      card.addEventListener('click', () => {
+        if(worn[item.slot]?.key === item.key) removeSlot(item.slot);
+        else wearItem(item);
+      });
+      grid.appendChild(card);
+    });
+    c.appendChild(grid);
+  }
+
+  makeSection('Tops & Outerwear', data.tops);
+}
+
+function renderBotsPanel() {
+  const c = document.getElementById('botsItems');
+  c.innerHTML = '';
+  const data = WARD[curGender];
+
+  function makeBotsSection(title, slots) {
+    const items = (curFilter==='all' ? data.bottoms : data.bottoms.filter(i=>i.era.includes(curFilter.replace('s',''))))
+      .filter(i => slots.includes(i.slot));
+    if(!items.length) return;
+    const hdr = document.createElement('div'); hdr.className='ward-section-hdr'; hdr.textContent=title; c.appendChild(hdr);
+    const grid = document.createElement('div'); grid.className='clothes-grid';
+    items.forEach(item => {
+      if(!IMGS[item.key]) return;
+      const isOn = worn[item.slot]?.key === item.key;
+      const card = document.createElement('div');
+      card.className = 'bots-card' + (isOn ? ' selected' : '');
+      card.innerHTML = `<img src="${IMGS[item.key]}" alt="${item.label}" loading="lazy"/>
+        <div class="cl">${item.label}</div><div class="ce">${item.era}</div>`;
+      card.addEventListener('click', () => {
+        if(worn[item.slot]?.key === item.key) removeSlot(item.slot);
+        else wearItem(item);
+      });
+      grid.appendChild(card);
+    });
+    c.appendChild(grid);
+  }
+
+  makeBotsSection('Jeans & Bottoms', ['bottom','full']);
+  makeBotsSection('Shoes', ['shoes']);
+}
+
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById('maniStage').classList.remove('drag-over');
+  if(dragItem){ wearItem(dragItem); dragItem=null; }
+}
+
+function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+function wearItem(item) {
+  if(item.slot === 'full') {
+    // Full-body: clear top/bottom, show full overlay
+    worn.top = null; worn.bottom = null; worn.full = item;
+    ['imgTop','imgBottom'].forEach(id=>{const el=document.getElementById(id);if(el){el.src='';el.style.display='none';}});
+    const fullEl = document.getElementById('imgFull');
+    if(fullEl){fullEl.src=IMGS[item.key];fullEl.style.display='block';}
+  } else if(item.slot==='top'||item.slot==='bottom') {
+    // Separates: clear full-body slot
+    worn.full = null;
+    const fullEl = document.getElementById('imgFull');
+    if(fullEl){fullEl.src='';fullEl.style.display='none';}
+    worn[item.slot] = item;
+    const imgEl = document.getElementById('img'+cap(item.slot));
+    if(imgEl){imgEl.src=IMGS[item.key];imgEl.style.display='block';}
+  } else {
+    worn[item.slot] = item;
+    const imgEl = document.getElementById('img'+cap(item.slot));
+    if(imgEl){imgEl.src=IMGS[item.key];imgEl.style.display='block';}
+  }
+  document.getElementById('maniHint').style.opacity='0';
+  updateLook();
+}
+
+function removeSlot(slot) {
+  worn[slot]=null;
+  const imgEl=document.getElementById('img'+cap(slot));
+  if(imgEl){ imgEl.src=''; imgEl.style.display='none'; }
+  if(Object.values(worn).every(v=>!v)) document.getElementById('maniHint').style.opacity='1';
+  updateLook();
+}
+
+function updateLook() {
+  const list = document.getElementById('lookList');
+  list.innerHTML='';
+  const eras = new Set(); let hasAny=false;
+  ['top','bottom','full','shoes','acc','bag'].forEach(slot=>{
+    const item=worn[slot]; if(!item)return; hasAny=true; eras.add(item.era);
+    const div=document.createElement('div'); div.className='look-item';
+    div.innerHTML=`<img src="${IMGS[item.key]}" alt=""/>
+      <div><div class="li-name">${item.label}</div><div class="li-era">${item.era}</div></div>
+      <button onclick="removeSlot('${slot}')">&times;</button>`;
+    list.appendChild(div);
+  });
+  document.getElementById('eraBlend').textContent = hasAny ? [...eras].join(' · ') : '—';
+  document.getElementById('readout').innerHTML = hasAny
+    ? [...Object.values(worn).filter(Boolean).map(i=>`<strong>${i.label}</strong>`)].join(' &nbsp;·&nbsp; ')
+    : 'Your look will appear here.';
+  renderWard();
+  renderBotsPanel();
+}
+
+function doClear() {
+  ['top','bottom','full','shoes','acc','bag'].forEach(removeSlot);
+}
+
+function doRandom() {
+  doClear();
+  const data = WARD[curGender];
+  const all = [...data.tops, ...data.bottoms];
+  const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+  const fulls   = all.filter(i=>i.slot==='full');
+  const tops    = all.filter(i=>i.slot==='top');
+  const bottoms = all.filter(i=>i.slot==='bottom');
+  const shoes   = all.filter(i=>i.slot==='shoes');
+  const accs    = all.filter(i=>i.slot==='acc');
+  if(fulls.length && Math.random()<0.4) {
+    wearItem(pick(fulls));
+  } else {
+    if(tops.length)    wearItem(pick(tops));
+    if(bottoms.length) wearItem(pick(bottoms));
+  }
+  if(shoes.length) wearItem(pick(shoes));
+  if(accs.length && Math.random()<0.5) wearItem(pick(accs));
+}
+
+// ── IMAGES (loaded after DOM) ─────────────────────────────────────────────────
+let IMGS = {};
+let MANI_F = '';
+let MANI_M = '';
+
+function loadImages(data) {
+  IMGS    = data.imgs;
+  MANI_F  = data.mani_f;
+  MANI_M  = data.mani_m;
+  document.getElementById('maniImg').src = MANI_F;
+  document.getElementById('maniHead').src = MANI_F;
+  if(IMGS.hero_img) setHeroCover(IMGS.hero_img);
+  renderWard();
+  renderBotsPanel();
+  buildDec();
+  initObs();
+}
+</script>
+
+
+<script src="images.js"></script>
+
+</body>
+</html>

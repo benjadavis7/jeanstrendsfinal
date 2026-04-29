@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -)",
+      "Bash(python3 -c ' *)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(node --check /Users/benjamindavis/Downloads/Jeans/images.js)",
+      "Bash(xargs ls *)",
+      "Bash(python3 -c \"from rembg import remove; print\\('rembg OK'\\)\")",
+      "Bash(python3 -c \"from PIL import Image; print\\('pillow OK'\\)\")",
+      "Bash(pip3 install *)",
+      "Bash(python3 reprocess_mens.py)",
+      "Bash(tmutil listlocalsnapshots *)",
+      "Bash(pip install *)",
+      "Bash(python3 -c \"import scipy; print\\('scipy ok'\\)\")"
+    ]
+  }
+}
